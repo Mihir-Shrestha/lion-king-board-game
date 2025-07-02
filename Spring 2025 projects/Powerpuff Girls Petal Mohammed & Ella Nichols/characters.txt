@@ -1,0 +1,6 @@
+playerName|age|strength|stamina|wisdom|pridePoints
+Blossom|5|500|500|1000|20000
+Buttercup|5|900|600|600|20000
+Bubbles|5|900|700|500|20000
+Professor|38|600|500|900|20000
+Mojo Jojo|5|1000|500|500|20000

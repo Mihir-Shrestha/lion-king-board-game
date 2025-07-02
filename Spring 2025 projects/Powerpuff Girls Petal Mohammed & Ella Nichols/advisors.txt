@@ -1,0 +1,6 @@
+advisorName|ability
+The Mayor of Townsville|Grants political protection: negate -5000 pride point event once
+Miss Keane|Grants educational insight: double wisdom effect from tiles for 3 turns
+Miss Sara Bellum|Grants strategic mind: +1000 pride points when landing on purple tiles
+Mask Scara|Grants invisibility: skip 1 negative event
+Fuzzy Lumpkins|Grants brute strength: block strength-reducing events
