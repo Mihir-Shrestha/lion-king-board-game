@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -21,20 +23,19 @@ struct Character
 vector<Character> read_characters_from_file(string filename)
 {
     vector<Character> characters;
-    
+
     ifstream file(filename);
 
-    if(!file.is_open())
+    if (!file.is_open())
     {
-        cerr<<"Error opening file: "<<filename<<endl;
+        cerr << "Error opening file: " << filename << endl;
         return characters;
     }
 
-
     string line;
-    getline(file, line); //to skip the first header line in the file
+    getline(file, line); // to skip the first header line in the file
 
-    while(getline(file, line))
+    while (getline(file, line))
     {
         stringstream ss(line);
         string token;
@@ -54,7 +55,7 @@ vector<Character> read_characters_from_file(string filename)
 
         characters.push_back(c);
     }
-     
+    return characters;
 }
 
 #endif

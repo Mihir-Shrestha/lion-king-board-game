@@ -1,6 +1,6 @@
 #include "Board.h"
 #define RED "\033[48;2;230;10;10m"
-#define GREEN "\033[48;2;34;139;34m"  /* Grassy Green (34,139,34) */
+#define GREEN "\033[48;2;34;139;34m" /* Grassy Green (34,139,34) */
 #define BLUE "\033[48;2;10;10;230m"
 #define PINK "\033[48;2;255;105;180m"
 #define BROWN "\033[48;2;139;69;19m"
@@ -22,7 +22,7 @@ void Board::initializeBoard()
     // Seed random number generator in your main function once
     for (int i = 0; i < 2; i++)
     {
-        initializeTiles(i);  // This ensures each lane has a unique tile distribution
+        initializeTiles(i); // This ensures each lane has a unique tile distribution
     }
 }
 
@@ -35,19 +35,21 @@ void Board::initializeTiles(int player_index)
     // Keep track of green tile positions to ensure we place exactly 30 greens
     for (int i = 0; i < total_tiles; i++)
     {
-        if (i == total_tiles - 1) {
+        if (i == total_tiles - 1)
+        {
             // Set the last tile as Orange for "Pride Rock"
             temp.color = 'O';
-        } 
-        else if (i == 0) {
+        }
+        else if (i == 0)
+        {
             // Set the first tile as Grey for "Pride Rock"
             temp.color = 'Y';
-        } 
+        }
         else
         {
-            if(player_index == 0)
+            if (player_index == 0)
             {
-                if(green_count < 30 && (rand() % (total_tiles - i) < 30 - green_count))
+                if (green_count < 30 && (rand() % (total_tiles - i) < 30 - green_count))
                 {
                     temp.color = 'G';
                     green_count++;
@@ -55,37 +57,37 @@ void Board::initializeTiles(int player_index)
                 else
                 {
                     int val = rand() % 100;
-                    if(i < total_tiles/2)
+                    if (i < total_tiles / 2)
                     {
-                        if(val < 20)
+                        if (val < 20)
                             temp.color = 'R';
-                        else if(val < 40)
+                        else if (val < 40)
                             temp.color = 'N';
-                        else if(val < 55)
+                        else if (val < 55)
                             temp.color = 'P';
-                        else if(val < 80)
+                        else if (val < 80)
                             temp.color = 'B';
-                        else if(val < 100)
+                        else if (val < 100)
                             temp.color = 'U';
                     }
                     else
                     {
-                        if(val < 20)
+                        if (val < 20)
                             temp.color = 'R';
-                        else if(val < 40)
+                        else if (val < 40)
                             temp.color = 'N';
-                        else if(val < 55)
+                        else if (val < 55)
                             temp.color = 'P';
-                        else if(val < 70)
+                        else if (val < 70)
                             temp.color = 'B';
-                        else if(val < 100)
+                        else if (val < 100)
                             temp.color = 'U';
                     }
                 }
             }
-            else if(player_index == 1)
+            else if (player_index == 1)
             {
-                if(green_count < 20 && (rand() % (total_tiles - i) < 20 - green_count))
+                if (green_count < 20 && (rand() % (total_tiles - i) < 20 - green_count))
                 {
                     temp.color = 'G';
                     green_count++;
@@ -93,30 +95,30 @@ void Board::initializeTiles(int player_index)
                 else
                 {
                     int val = rand() % 100;
-                    if(i < total_tiles/2)
+                    if (i < total_tiles / 2)
                     {
-                        if(val < 25)
+                        if (val < 25)
                             temp.color = 'R';
-                        else if(val < 50)
+                        else if (val < 50)
                             temp.color = 'N';
-                        else if(val < 70)
+                        else if (val < 70)
                             temp.color = 'P';
-                        else if(val < 75)
+                        else if (val < 75)
                             temp.color = 'B';
-                        else if(val < 100)
+                        else if (val < 100)
                             temp.color = 'U';
                     }
                     else
                     {
-                        if(val < 15)
+                        if (val < 15)
                             temp.color = 'R';
-                        else if(val < 30)
+                        else if (val < 30)
                             temp.color = 'N';
-                        else if(val < 50)
+                        else if (val < 50)
                             temp.color = 'P';
-                        else if(val < 75)
+                        else if (val < 75)
                             temp.color = 'B';
-                        else if(val < 100)
+                        else if (val < 100)
                             temp.color = 'U';
                     }
                 }
@@ -124,7 +126,7 @@ void Board::initializeTiles(int player_index)
         }
         // Assign the tile to the board for the specified lane
         _tiles[player_index][i] = temp;
-    }   
+    }
 }
 
 // Board::Board()
@@ -233,17 +235,18 @@ void Board::displayTrack(int player_index)
 void Board::displayBoard()
 {
     for (int i = 0; i < 2; i++)
-    {   
-        if(i == 0 )
+    {
+        if (i == 0)
             cout << "Cub Training" << endl;
         else
             cout << "Straight to the Pride Lands" << endl;
         displayTrack(i);
-        if (i == 0) {
-            cout << endl;  // Add an extra line between the two lanes
+        if (i == 0)
+        {
+            cout << endl; // Add an extra line between the two lanes
         }
     }
-    cout<<endl;
+    cout << endl;
 }
 
 bool Board::movePlayer(int player_index)
@@ -269,11 +272,10 @@ int Board::getPlayerPosition(int player_index) const
 
 void Board::checkPosition(int player_index) const
 {
+    cout << endl;
     int pos = getPlayerPosition(player_index);
-    cout<<"Player "<< player_index <<" is on tile "<< pos+1 <<endl;
+    cout << "Player " << player_index + 1 << " is on tile " << pos + 1 << endl;
 }
-
-
 
 // int main()
 // {

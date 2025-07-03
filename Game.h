@@ -3,12 +3,8 @@
 
 class Game
 {
-    private:
-
-
-    public:
-    
-
-}
+private:
+public:
+};
 
 #endif
