@@ -2,7 +2,7 @@
 #include "Board.h"
 #include "Player.h"
 #include "Tile.h"
-#include "Character.h"
+#include "InputData.h"
 
 #include <vector>
 #include <ctime>
@@ -15,8 +15,9 @@ int main()
     int player_count = 2;
 
     vector<Player> players;
-
-    vector<Character> character_list = read_characters_from_file("project2_input_files/characters.txt");
+    vector<Character> character_list = read_characters_from_file("input_files/characters.txt");
+    RandomEvent random_events = read_random_events_from_file("input_files/random_events.txt");
+    vector<Riddles> riddles = read_riddles_from_file("input_files/riddles.txt");
 
     for (int i = 0; i < player_count; i++)
     {
@@ -30,7 +31,7 @@ int main()
         {
             cout << index << ". " << character.name << " | Age:" << character.age << " | Strength:" << character.strength
                  << " | Stamina:" << character.stamina << " | Wisdom:" << character.wisdom
-                 << " | Pride Points:" << character.pridePoints << endl;
+                 << " | Pride Points:" << character.pride_points << endl;
             index++;
         }
 
@@ -44,7 +45,7 @@ int main()
         Character selected_character = character_list[option - 1];
 
         players.push_back(Player(selected_character.name, selected_character.age, selected_character.strength,
-                                 selected_character.stamina, selected_character.wisdom, selected_character.pridePoints));
+                                 selected_character.stamina, selected_character.wisdom, selected_character.pride_points));
 
         character_list.erase(character_list.begin() + option - 1);
     }
