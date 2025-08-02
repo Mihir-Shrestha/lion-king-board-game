@@ -1,9 +1,9 @@
-#include <iostream>
 #include "Board.h"
 #include "Player.h"
 #include "Tile.h"
 #include "InputData.h"
 
+#include <iostream>
 #include <vector>
 #include <ctime>
 
@@ -21,8 +21,7 @@ int main()
 
     for (int i = 0; i < player_count; i++)
     {
-        cout << endl;
-        cout << "Player " << i + 1 << ":" << endl;
+        cout << "\nPlayer " << i + 1 << ":" << endl;
         cout << "---------------------" << endl;
         cout << "Select your character (1|2|3|4|5):" << endl;
 
@@ -65,8 +64,7 @@ int main()
             bool turn_over = false;
             while (!turn_over)
             {
-                cout << endl;
-                cout << "Player " << i + 1 << "'s turn:" << endl;
+                cout << "\n----- Player " << i + 1 << "'s turn: -----" << endl;
                 cout << "1. Check Player Progress" << endl;
                 cout << "2. Review Character" << endl;
                 cout << "3. Check Position" << endl;
@@ -78,34 +76,76 @@ int main()
                 {
                     cin.clear();
                     cin.ignore(1000, '\n');
-                    cout << "Choose from options (1|2|3|4|5):" << endl;
+                    cout << "\nChoose from options (1|2|3|4|5):" << endl;
                     cin >> option;
                 }
 
                 switch (option)
                 {
                 case 1:
+                {
                     players[i].checkPlayerProgress();
                     break;
+                }
                 case 2:
+                {
                     players[i].reviewCharacter();
                     break;
+                }
                 case 3:
-                    board.checkPosition(i);
+                {
+                    int pos = board.getPlayerPosition(i);
+                    cout << "\nPlayer " << i + 1 << " is on tile " << pos + 1 << endl;
                     break;
+                }
                 case 4:
-                    players[i].reviewAdvisor();
+                {
+                    cout << "Advisor: " << players[i].getAdvisor() << endl;
                     break;
+                }
                 case 5:
+                {
+                    int current_player_position = board.getPlayerPosition(i);
+                    char current_tile_color = board.getTileColor(i, current_player_position);
+
+                    // move player forward, apply tile effects and its effect on player position
                     board.movePlayer(i);
-                    cout << endl;
-                    board.displayBoard();
-                    turn_over = true;
+
+                    int new_player_position = board.getPlayerPosition(i);
+                    char new_tile_color = board.getTileColor(i, new_player_position);
+
+                    players[i] = board.applyTileEffect(players[i], new_tile_color, i, riddles, random_events);
+
+                    if (new_tile_color == 'R') // Red tile means move back 10 tiles
+                    {
+                        board.setPlayerPosition(i, new_player_position - 10);
+                        board.displayBoard();
+                        turn_over = true;
+                    }
+                    else if (new_tile_color == 'N') // Brown tile means move player back to the last position;
+                    {
+                        int last_position = board.getPlayerLastPosition(i);
+                        board.setPlayerPosition(i, last_position);
+                        board.displayBoard();
+                        turn_over = true;
+                    }
+                    else if (new_tile_color == 'B') // If Blue tile, player gets an extra turn
+                    {
+                        cout << endl;
+                        board.displayBoard();
+                        cout << "You get an extra turn!" << endl;
+                    }
+                    else
+                    {
+                        cout << endl;
+                        board.displayBoard();
+                        turn_over = true;
+                    }
                     break;
+                }
                 }
             }
         }
     }
-
     return 0;
 }

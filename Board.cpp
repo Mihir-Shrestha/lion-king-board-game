@@ -13,6 +13,7 @@
 #include <string>
 #include <cstdlib> // For rand() and srand()
 #include <ctime>   // For time()
+#include <map>
 
 using namespace std;
 
@@ -50,7 +51,7 @@ void Board::initializeTiles(int player_index)
             {
                 if (green_count < 30 && (rand() % (total_tiles - i) < 30 - green_count))
                 {
-                    temp.color = 'G';
+                    temp.color = 'G'; // Green tile
                     green_count++;
                 }
                 else
@@ -59,15 +60,15 @@ void Board::initializeTiles(int player_index)
                     if (i < total_tiles / 2)
                     {
                         if (val < 20)
-                            temp.color = 'R';
+                            temp.color = 'R'; // Red tile
                         else if (val < 40)
-                            temp.color = 'N';
+                            temp.color = 'N'; // Brown tile
                         else if (val < 55)
-                            temp.color = 'P';
+                            temp.color = 'P'; // Pink tile
                         else if (val < 80)
-                            temp.color = 'B';
+                            temp.color = 'B'; // Blue tile
                         else if (val < 100)
-                            temp.color = 'U';
+                            temp.color = 'U'; // Purple tile
                     }
                     else
                     {
@@ -128,17 +129,6 @@ void Board::initializeTiles(int player_index)
     }
 }
 
-// Board::Board()
-// {
-//     _player_count = 1;
-
-//     // Initialize player position
-//     _player_position[0] = 0;
-
-//     // Initialize tiles
-//     initializeTiles();
-// }
-
 Board::Board(int player_count)
 {
     if (player_count > _MAX_PLAYERS)
@@ -157,7 +147,6 @@ Board::Board(int player_count)
     }
 
     // Initialize tiles
-
     initializeBoard();
 }
 
@@ -236,28 +225,31 @@ void Board::displayBoard()
     for (int i = 0; i < 2; i++)
     {
         if (i == 0)
-            cout << "Cub Training" << endl;
+            cout << "\nCub Training" << endl;
         else
-            cout << "Straight to the Pride Lands" << endl;
+            cout << "\nStraight to the Pride Lands" << endl;
         displayTrack(i);
-        if (i == 0)
-        {
-            cout << endl; // Add an extra line between the two lanes
-        }
     }
     cout << endl;
 }
 
-bool Board::movePlayer(int player_index)
+void Board::movePlayer(int player_index)
 {
-    // Increment player position
-    _player_position[player_index]++;
-    if (_player_position[player_index] == _BOARD_SIZE - 1)
-    {
-        // Player reached last tile
-        return true;
-    }
-    return false;
+    // Store the last position before moving
+    _player_last_position[player_index] = _player_position[player_index];
+
+    // Increment player position based on dice roll
+    int dice_roll = rand() % 6 + 1;
+    _player_position[player_index] += dice_roll;
+
+    cout << "\nYou rolled a " << dice_roll << endl;
+
+    // if (_player_position[player_index] == _BOARD_SIZE - 1)
+    // {
+    //     // Player reached last tile
+    //     return true;
+    // }
+    // return false;
 }
 
 int Board::getPlayerPosition(int player_index) const
@@ -269,20 +261,300 @@ int Board::getPlayerPosition(int player_index) const
     return -1;
 }
 
-void Board::checkPosition(int player_index) const
+void Board::setPlayerPosition(int player_index, int position)
 {
-    cout << endl;
-    int pos = getPlayerPosition(player_index);
-    cout << "Player " << player_index + 1 << " is on tile " << pos + 1 << endl;
+    if (position < 0)
+    {
+        _player_position[player_index] = 0; // Ensure position does not go below 0
+    }
+    else if (position >= _BOARD_SIZE)
+    {
+        _player_position[player_index] = _BOARD_SIZE - 1; // Ensure position does not exceed board size
+    }
+    else
+    {
+        _player_position[player_index] = position; // Set the player to the specified position
+    }
 }
 
-// int main()
-// {
-//     srand(time(0));
+int Board::getPlayerLastPosition(int player_index) const
+{
+    if (player_index >= 0 && player_index < _MAX_PLAYERS)
+    {
+        return _player_last_position[player_index];
+    }
+    return -1; // Return -1 if the player index is invalid
+}
 
-//     Board board(2);
+char Board::getTileColor(int player_index, int position) const
+{
+    if (position >= 0 && position < _BOARD_SIZE)
+    {
+        return _tiles[player_index][position].color;
+    }
+    return ' '; // Return a space if the position is invalid
+}
 
-//     board.displayBoard();
+Player Board::applyTileEffect(Player player, char tile_color, int player_index, vector<Riddles> riddles, RandomEvent random_events)
+{
+    switch (tile_color)
+    {
+    case 'G':
+    {
+        cout << "\nYou landed on a Green tile!" << endl;
 
-//     return 0;
-// }
+        int event_occurs = rand() % 2; // 0 for no event, 1 for event
+        if (event_occurs == 0)
+        {
+            cout << "\nNothing happens..." << endl;
+        }
+        else
+        {
+            map<string, int> advisors = {// Advisor names and their corresponding indices
+                                         {"None", 0},
+                                         {"Rafiki", 1},
+                                         {"Nala", 2},
+                                         {"Sarabi", 3},
+                                         {"Zazu", 4},
+                                         {"Sarafina", 5}};
+
+            cout << "\nThere is an event on this tile!" << endl;
+
+            int event_type = rand() % 2; // 0 for negative event, 1 for positive event
+            if (event_type == 0)
+            {
+                int rand_neg = rand() % random_events.negative_events.size();
+                while (random_events.negative_events[rand_neg].path_type != player_index)
+                {
+                    rand_neg = rand() % random_events.negative_events.size();
+                }
+                cout << "\n"
+                     << random_events.negative_events[rand_neg].description << endl;
+
+                // Check if advisor's protection is applicable
+                if (random_events.negative_events[rand_neg].advisor != advisors[player.getAdvisor()])
+                {
+                    int to_deduct_pride_points = random_events.negative_events[rand_neg].pride_points;
+
+                    cout << "\nYou lose " << to_deduct_pride_points << " pride points" << endl;
+
+                    player.setPridePoints(to_deduct_pride_points);
+                }
+                else
+                {
+                    cout << "\nYour advisor protected you from this event!" << endl;
+                }
+            }
+            else
+            {
+                // Apply positive event effects to the player
+                int rand_pos = rand() % random_events.positive_events.size();
+                while (random_events.positive_events[rand_pos].path_type != player_index)
+                {
+                    rand_pos = rand() % random_events.positive_events.size();
+                }
+                cout << "\n"
+                     << random_events.positive_events[rand_pos].description << endl;
+
+                int to_increase_pride_points = random_events.positive_events[rand_pos].pride_points;
+
+                cout << "\nYou gain " << to_increase_pride_points << " pride points" << endl;
+
+                player.setPridePoints(to_increase_pride_points);
+            }
+        }
+
+        break;
+    }
+
+    case 'B':
+    {
+        cout << "\nYou landed on a Blue tile!" << endl;
+
+        cout << "\nYou've found a peaceful oasis! Take a deep breath and relax. You gain 200 Stamina, Strength and Wisdom points. You also gain an extra turn to move forward." << endl;
+
+        player.setStamina(200);
+        player.setStrength(200);
+        player.setWisdom(200);
+
+        break;
+    }
+
+    case 'P':
+    {
+        cout << "\nYou landed on a Pink tile!" << endl;
+
+        cout << "\nWelcome to the land of enrichment! You gain 300 Stamina, Strength and Wisdom points. You also get to choose or change your current Advisor." << endl;
+
+        player.setStamina(300);
+        player.setStrength(300);
+        player.setWisdom(300);
+
+        vector<pair<string, pair<int, string>>> advisors = {
+            {"None", {0, "No special abilities"}},
+            {"Rafiki", {1, "Invisibility - Become un-seen"}},
+            {"Nala", {2, "Night Vision - Clearly see in darkness"}},
+            {"Sarabi", {3, "Energy Manipulation - Shape and control the properties of energy"}},
+            {"Zazu", {4, "Weather Control - Influence and manipulate weather patterns"}},
+            {"Sarafina", {5, "Super Speed - Run 4x faster than the maximum speed of a lion"}}};
+
+        string current_advisor = player.getAdvisor();
+
+        if (current_advisor == "None")
+        {
+            cout << "\nYou currently have no advisor. Choose one from the list below:" << endl;
+
+            cout << endl;
+            for (auto advisor : advisors)
+            {
+                if (advisor.first == "None")
+                    continue; // Skip the "None" advisor
+                cout << advisor.second.first << ". " << advisor.first << " | " << advisor.second.second << endl;
+            }
+
+            int option;
+            cin >> option;
+
+            while (option < 1 || option > advisors.size() - 1)
+            {
+                cout << "Choose from options (1|2|3|4|5):" << endl;
+                cin >> option;
+            }
+
+            switch (option)
+            {
+            case 1:
+                player.setAdvisor("Rafiki");
+                break;
+            case 2:
+                player.setAdvisor("Nala");
+                break;
+            case 3:
+                player.setAdvisor("Sarabi");
+                break;
+            case 4:
+                player.setAdvisor("Zazu");
+                break;
+            case 5:
+                player.setAdvisor("Sarafina");
+                break;
+            }
+
+            cout << "You have chosen " << player.getAdvisor() << " as your advisor." << endl;
+        }
+        else
+        {
+            cout << "\nYou currently have " << player.getAdvisor() << " as your advisor." << endl;
+            cout << "\nWould you like to change your advisor? (y/n)" << endl;
+
+            char option;
+            cin >> option;
+            while (option != 'y' && option != 'n')
+            {
+                cout << "\nPlease enter 'y' or 'n':" << endl;
+                cin >> option;
+            }
+
+            if (option == 'y')
+            {
+                cout << "\nChoose one from the list below." << endl;
+
+                for (auto advisor : advisors)
+                {
+                    if (advisor.first == "None")
+                        continue; // Skip the "None" advisor
+                    cout << advisor.second.first << ". " << advisor.first << " | " << advisor.second.second << endl;
+                }
+
+                int option;
+                cin >> option;
+
+                while (option < 1 || option > advisors.size() - 1)
+                {
+                    cout << "\nChoose from options (1|2|3|4|5):" << endl;
+                    cin >> option;
+                }
+
+                switch (option)
+                {
+                case 1:
+                    player.setAdvisor("Rafiki");
+                    break;
+                case 2:
+                    player.setAdvisor("Nala");
+                    break;
+                case 3:
+                    player.setAdvisor("Sarabi");
+                    break;
+                case 4:
+                    player.setAdvisor("Zazu");
+                    break;
+                case 5:
+                    player.setAdvisor("Sarafina");
+                    break;
+                }
+
+                cout << "\nYou have chosen " << player.getAdvisor() << " as your new advisor." << endl;
+            }
+            else if (option == 'n')
+            {
+                cout << "\nYou have chosen to keep your current advisor." << endl;
+            }
+        }
+
+        break;
+    }
+
+    case 'R':
+    {
+        cout << "\nYou landed on a Red tile!" << endl;
+
+        cout << "\nUh-oh, you have stumbled into the Graveyard! You lose 100 Stamina, Strength and Wisdom points. You also go back 10 spaces." << endl;
+
+        player.setStamina(-100);
+        player.setStrength(-100);
+        player.setWisdom(-100);
+
+        break;
+    }
+
+    case 'N':
+    {
+        cout << "\nYou landed on a Brown tile!" << endl;
+
+        cout << "\nThe Hyenas are on the prowl! They drag you back to where you were last. You also lose 100 Stamina points." << endl;
+
+        player.setStamina(-100);
+
+        break;
+    }
+
+    case 'U':
+    {
+        cout << "\nYou landed on a Purple tile!" << endl;
+
+        cout << "\nTime for a test of wits! You gain or lose 500 Wisdom points depending on whether your answer is right or wrong." << endl;
+
+        int riddle_index = rand() % riddles.size();
+        cout << "\nRiddle: " << riddles[riddle_index].question << endl;
+
+        string answer;
+        cout << "\nYour answer: ";
+        cin >> answer;
+
+        if (answer == riddles[riddle_index].answer)
+        {
+            cout << "\nCorrect answer! You gain 500 Wisdom points." << endl;
+            player.setWisdom(500);
+        }
+        else
+        {
+            cout << "\nIncorrect answer! You lose 500 Wisdom points." << " The right answer was: " << riddles[riddle_index].answer << endl;
+            player.setWisdom(-500);
+        }
+
+        break;
+    }
+    }
+    return player;
+}

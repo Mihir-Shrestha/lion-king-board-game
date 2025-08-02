@@ -6,7 +6,7 @@
 
 struct Character
 {
-    string name;
+    std::string name;
     int age;
     int strength;
     int stamina;
@@ -16,7 +16,7 @@ struct Character
 
 struct Event
 {
-    string description;
+    std::string description;
     int path_type;    // 0 for cub training, 1 for straight to the pride lands
     int advisor;      // 0 for none, 1-5 for different advisors
     int pride_points; // positive or negative points
@@ -24,18 +24,18 @@ struct Event
 
 struct RandomEvent
 {
-    vector<Event> positive_events;
-    vector<Event> negative_events;
+    std::vector<Event> positive_events;
+    std::vector<Event> negative_events;
 };
 
 struct Riddles
 {
-    string question;
-    string answer;
+    std::string question;
+    std::string answer;
 };
 
-vector<Character> read_characters_from_file(string filename);
-RandomEvent read_random_events_from_file(string filename);
-vector<Riddles> read_riddles_from_file(string filename);
+std::vector<Character> read_characters_from_file(std::string filename);
+RandomEvent read_random_events_from_file(std::string filename);
+std::vector<Riddles> read_riddles_from_file(std::string filename);
 
 #endif
