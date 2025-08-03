@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
 
@@ -55,12 +56,16 @@ int main()
     cout << endl;
     board.displayBoard();
 
-    // make a loop for the game to run on
-    int game_end = 0;
+    // Main game loop
+    bool game_end = false;
     while (!game_end)
     {
         for (int i = 0; i < player_count; i++)
         {
+            // Skip the turn if the player has already reached the end
+            if (players[i].hasPlayerReachedEnd())
+                continue;
+
             bool turn_over = false;
             while (!turn_over)
             {
@@ -145,6 +150,82 @@ int main()
                 }
                 }
             }
+            // Check if the player has reached the end of the board
+            if (board.playerReachedEnd(i))
+            {
+                cout << "\n Congratulations Player " << i + 1 << "! You have reached the end of the board ..." << endl;
+                players[i].setPlayerEndGame();
+                players[i].calculateLeadershipToPride();
+                break;
+            }
+        }
+
+        // Check if all players have reached the end
+        bool all_reached_end = true;
+        for (auto player : players)
+        {
+            if (!player.hasPlayerReachedEnd())
+            {
+                all_reached_end = false;
+                break;
+            }
+        }
+        if (all_reached_end)
+        {
+            game_end = true;
+            cout << "\n----- All players have reached the end! -----\n"
+                 << endl;
+        }
+    }
+
+    // Determine the winner based on pride points
+    int max_pride_points = -1;
+    int winner_index = -1;
+
+    for (int i = 0; i < player_count; i++)
+    {
+        if (players[i].getPridePoints() > max_pride_points)
+        {
+            max_pride_points = players[i].getPridePoints();
+            winner_index = i;
+        }
+    }
+    cout << "Game Results:" << endl;
+    cout << "-----------------" << endl;
+    cout << "Winner: Player " << winner_index + 1 << " (" << players[winner_index].getName() << ")" << endl;
+    cout << "-----------------" << endl;
+    for (int i = 0; i < player_count; i++)
+    {
+        cout << "Player " << i + 1 << ": " << players[i].getName() << endl;
+        cout << "Age: " << players[i].getAge() << endl;
+        cout << "Stamina: " << players[i].getStamina() << endl;
+        cout << "Strength: " << players[i].getStrength() << endl;
+        cout << "Wisdom: " << players[i].getWisdom() << endl;
+        cout << "Pride Points: " << players[i].getPridePoints() << endl;
+        cout << "Advisor: " << players[i].getAdvisor() << endl;
+    }
+
+    cout << "\n----- GAME OVER -----\n"
+         << endl;
+
+    // Write game results to a file
+    ofstream results_file("game_results.txt");
+    if (results_file.is_open())
+    {
+        results_file << "Game Results:" << endl;
+        results_file << "-----------------" << endl;
+        results_file << "Winner: Player " << winner_index + 1 << " (" << players[winner_index].getName() << ")" << endl;
+        results_file << "-----------------" << endl;
+        for (int i = 0; i < player_count; i++)
+        {
+            results_file << "Player " << i + 1 << ": " << players[i].getName() << endl;
+            results_file << "Age: " << players[i].getAge() << endl;
+            results_file << "Stamina: " << players[i].getStamina() << endl;
+            results_file << "Strength: " << players[i].getStrength() << endl;
+            results_file << "Wisdom: " << players[i].getWisdom() << endl;
+            results_file << "Pride Points: " << players[i].getPridePoints() << endl;
+            results_file << "Advisor: " << players[i].getAdvisor() << endl;
+            results_file << "-----------------" << endl;
         }
     }
     return 0;

@@ -1,0 +1,20 @@
+Game Results:
+-----------------
+Winner: Player 2 (Roary)
+-----------------
+Player 1: Elsa
+Age: 12
+Stamina: 1200
+Strength: 1000
+Wisdom: 1300
+Pride Points: 56200
+Advisor: Sarabi
+
+Player 2: Roary
+Age: 18
+Stamina: 1000
+Strength: 1000
+Wisdom: 1500
+Pride Points: 57600
+Advisor: Rafiki
+

@@ -12,9 +12,10 @@ private:
     int _wisdom;
     int _pride_points;
     std::string _advisor;
+    bool _reached_end;
 
 public:
-    Player(std::string name, int age, int stamina, int strength, int wisdom, int pride_points, std::string advisor = "None");
+    Player(std::string name, int age, int stamina, int strength, int wisdom, int pride_points, std::string advisor = "None", bool reached_end = false);
     void checkPlayerProgress();
     void reviewCharacter();
     std::string getName() const;
@@ -29,7 +30,9 @@ public:
     void setWisdom(int value);
     void setPridePoints(int value);
     void setAdvisor(std::string advisor);
-    void leadershipToPride();
+    int calculateLeadershipToPride();
+    bool hasPlayerReachedEnd() const;
+    void setPlayerEndGame();
 };
 
 #endif

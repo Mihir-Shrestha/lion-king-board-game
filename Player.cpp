@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Player::Player(string name, int age, int stamina, int strength, int wisdom, int pride_points, string advisor)
+Player::Player(string name, int age, int stamina, int strength, int wisdom, int pride_points, string advisor, bool reached_end)
 {
     _name = name;
     _age = age;
@@ -14,6 +14,7 @@ Player::Player(string name, int age, int stamina, int strength, int wisdom, int 
     _wisdom = wisdom;
     _pride_points = pride_points;
     _advisor = advisor;
+    _reached_end = reached_end;
 }
 
 void Player::checkPlayerProgress()
@@ -24,13 +25,6 @@ void Player::checkPlayerProgress()
     cout << "Wisdom: " << _wisdom << endl;
     cout << "Pride Points: " << _pride_points << endl;
     cout << endl;
-
-    char ans;
-    cout << "Do you want to convert Leadership Traits to Pride Points? (y/n)" << endl;
-    cin >> ans;
-
-    if ((ans == 'y') || (ans == 'Y'))
-        leadershipToPride();
 }
 
 void Player::reviewCharacter()
@@ -108,16 +102,24 @@ void Player::setAdvisor(string advisor)
     _advisor = advisor;
 }
 
-void Player::leadershipToPride()
+int Player::calculateLeadershipToPride()
 {
     int stamina = getStamina();
     int strength = getStrength();
     int wisdom = getWisdom();
+    int pride_points = getPridePoints();
 
-    int pridepoints = stamina + strength + wisdom;
+    _pride_points += (stamina + strength + wisdom) / 100 * 1000;
 
-    setStamina(-10000);
-    setStrength(-10000);
-    setWisdom(-10000);
-    setPridePoints(pridepoints);
+    return _pride_points;
+}
+
+bool Player::hasPlayerReachedEnd() const
+{
+    return _reached_end;
+}
+
+void Player::setPlayerEndGame()
+{
+    _reached_end = true;
 }

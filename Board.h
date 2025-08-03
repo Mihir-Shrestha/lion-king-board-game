@@ -30,6 +30,7 @@ public:
     int getPlayerLastPosition(int player_index) const;
     char getTileColor(int player_index, int position) const;
     Player applyTileEffect(Player player, char tile_color, int player_index, std::vector<Riddles> riddles, RandomEvent random_events);
+    bool playerReachedEnd(int player_index) const;
 };
 
 #endif

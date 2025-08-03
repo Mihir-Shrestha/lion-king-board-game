@@ -242,14 +242,9 @@ void Board::movePlayer(int player_index)
     int dice_roll = rand() % 6 + 1;
     _player_position[player_index] += dice_roll;
 
-    cout << "\nYou rolled a " << dice_roll << endl;
+    _player_position[player_index] = (_player_position[player_index] >= _BOARD_SIZE) ? _BOARD_SIZE - 1 : _player_position[player_index];
 
-    // if (_player_position[player_index] == _BOARD_SIZE - 1)
-    // {
-    //     // Player reached last tile
-    //     return true;
-    // }
-    // return false;
+    cout << "\nYou rolled a " << dice_roll << endl;
 }
 
 int Board::getPlayerPosition(int player_index) const
@@ -557,4 +552,9 @@ Player Board::applyTileEffect(Player player, char tile_color, int player_index, 
     }
     }
     return player;
+}
+
+bool Board::playerReachedEnd(int player_index) const
+{
+    return _player_position[player_index] == _BOARD_SIZE - 1;
 }
