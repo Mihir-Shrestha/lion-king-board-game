@@ -5,6 +5,7 @@
 class Player
 {
 private:
+    std::string _player_name;
     std::string _name;
     int _age;
     int _stamina;
@@ -15,9 +16,10 @@ private:
     bool _reached_end;
 
 public:
-    Player(std::string name, int age, int stamina, int strength, int wisdom, int pride_points, std::string advisor = "None", bool reached_end = false);
+    Player(std::string _player_name, int _path_index, std::string name, int age, int stamina, int strength, int wisdom, int pride_points, std::string advisor = "None", bool reached_end = false);
     void checkPlayerProgress();
     void reviewCharacter();
+    std::string getPlayerName() const;
     std::string getName() const;
     int getAge() const;
     int getStamina() const;

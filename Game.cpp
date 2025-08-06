@@ -12,9 +12,33 @@ using namespace std;
 
 int main()
 {
-    int option;
-    int player_count = 2;
+    srand(time(0));
 
+    cout << "\nWelcome to the Lion King themed Board Game!" << endl;
+    cout << "-------------------------------------" << endl;
+    cout << "\nThis game is inspired by the Lion King and features characters, riddles, and random events." << endl;
+    cout << "\nYou will navigate through a board, facing challenges and collecting pride points." << endl;
+    cout << "\nLet's begin!" << endl;
+    cout << "-------------------------------------" << endl;
+
+    int player_count = 2;
+    cout << "\nSelect the number of players (2-5): ";
+    cin >> player_count;
+    while (cin.fail() || player_count < 2 || player_count > 5)
+    {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "\nPlease enter a valid number of players (2-5):" << endl;
+        cin >> player_count;
+    }
+
+    Board board(player_count);
+
+    cout << "\nYou have selected " << player_count << " players." << endl;
+
+    cout << "\nEach player will choose a character with unique attributes. The characters are as follows:" << endl;
+
+    int option;
     vector<Player> players;
     vector<Character> character_list = read_characters_from_file("input_files/characters.txt");
     RandomEvent random_events = read_random_events_from_file("input_files/random_events.txt");
@@ -22,9 +46,12 @@ int main()
 
     for (int i = 0; i < player_count; i++)
     {
-        cout << "\nPlayer " << i + 1 << ":" << endl;
+        string player_name;
+        cout << "\nEnter name of Player " << i + 1 << ": ";
+        cin >> player_name;
+
+        cout << "\nPlayer " << i + 1 << " / " << player_name << endl;
         cout << "---------------------" << endl;
-        cout << "Select your character (1|2|3|4|5):" << endl;
 
         int index = 1;
         for (auto character : character_list)
@@ -34,26 +61,40 @@ int main()
                  << " | Pride Points:" << character.pride_points << endl;
             index++;
         }
+        cout << "\nSelect your character (1|2|3|4|5): ";
 
         cin >> option;
-        while (option < 1 || option > 5)
+        while (cin.fail() || option < 1 || option > 5)
         {
-            cout << "Choose from options (1|2|3|4|5):" << endl;
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\nChoose from options (1|2|3|4|5): " << endl;
             cin >> option;
         }
+        int path_index;
+        cout << "\nChoose your path (1 for Cub training, 2 for Straight to the pride lands): ";
+        cin >> path_index;
+
+        while (cin.fail() || path_index < 1 || path_index > 2)
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "\nChoose from options (1|2): " << endl;
+            cin >> path_index;
+        }
+
+        board.setPathActive(path_index - 1);
+        board.setPlayerPath(i, path_index - 1);
 
         Character selected_character = character_list[option - 1];
 
-        players.push_back(Player(selected_character.name, selected_character.age, selected_character.strength,
-                                 selected_character.stamina, selected_character.wisdom, selected_character.pride_points));
+        players.push_back(Player(player_name, path_index, selected_character.name, selected_character.age,
+                                 selected_character.strength, selected_character.stamina, selected_character.wisdom, selected_character.pride_points));
 
         character_list.erase(character_list.begin() + option - 1);
     }
 
-    srand(time(0));
-    Board board(player_count);
     cout << "\n----- GAME START -----" << endl;
-    cout << endl;
     board.displayBoard();
 
     // Main game loop
@@ -203,6 +244,7 @@ int main()
         cout << "Wisdom: " << players[i].getWisdom() << endl;
         cout << "Pride Points: " << players[i].getPridePoints() << endl;
         cout << "Advisor: " << players[i].getAdvisor() << endl;
+        cout << "-----------------" << endl;
     }
 
     cout << "\n----- GAME OVER -----\n"

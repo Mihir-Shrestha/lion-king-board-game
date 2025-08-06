@@ -1,20 +1,20 @@
 Game Results:
 -----------------
-Winner: Player 2 (Roary)
+Winner: Player 1 (Apollo)
 -----------------
-Player 1: Elsa
-Age: 12
-Stamina: 1200
-Strength: 1000
-Wisdom: 1300
-Pride Points: 56200
-Advisor: Sarabi
-
-Player 2: Roary
-Age: 18
-Stamina: 1000
-Strength: 1000
-Wisdom: 1500
-Pride Points: 57600
-Advisor: Rafiki
-
+Player 1: Apollo
+Age: 5
+Stamina: 200
+Strength: 900
+Wisdom: 900
+Pride Points: 39300
+Advisor: Sarafina
+-----------------
+Player 2: Mane
+Age: 8
+Stamina: 300
+Strength: 700
+Wisdom: 300
+Pride Points: 34100
+Advisor: None
+-----------------

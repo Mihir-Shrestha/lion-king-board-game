@@ -26,7 +26,7 @@ void Board::initializeBoard()
     }
 }
 
-void Board::initializeTiles(int player_index)
+void Board::initializeTiles(int path_index)
 {
     Tile temp;
     int green_count = 0;
@@ -47,7 +47,7 @@ void Board::initializeTiles(int player_index)
         }
         else
         {
-            if (player_index == 0)
+            if (path_index == 0) // Cub training
             {
                 if (green_count < 30 && (rand() % (total_tiles - i) < 30 - green_count))
                 {
@@ -85,7 +85,7 @@ void Board::initializeTiles(int player_index)
                     }
                 }
             }
-            else if (player_index == 1)
+            else if (path_index == 1) // Straight to the Pride Lands
             {
                 if (green_count < 20 && (rand() % (total_tiles - i) < 20 - green_count))
                 {
@@ -125,7 +125,7 @@ void Board::initializeTiles(int player_index)
             }
         }
         // Assign the tile to the board for the specified lane
-        _tiles[player_index][i] = temp;
+        _tiles[path_index][i] = temp;
     }
 }
 
@@ -139,6 +139,7 @@ Board::Board(int player_count)
     {
         _player_count = player_count;
     }
+    _player_paths.resize(player_count);
 
     // Initialize player position
     for (int i = 0; i < _player_count; i++)
@@ -159,78 +160,137 @@ bool Board::isPlayerOnTile(int player_index, int pos)
     return false;
 }
 
-void Board::displayTile(int player_index, int pos)
+bool Board::isAnyoneOnTile(int pos)
+{
+    for (int i = 0; i < _player_count; i++)
+    {
+        if (_player_position[i] == pos)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Board::displayTile(int path_index, int pos)
 {
     // string space = "                                       ";
     string color = "";
-    int player = isPlayerOnTile(player_index, pos);
+
+    vector<int> players_on_tile;
+    for (int i = 0; i < _player_count; i++)
+    {
+        if (_player_paths[i] == path_index && isPlayerOnTile(i, pos))
+        {
+            players_on_tile.push_back(i + 1);
+        }
+    }
 
     // Template for displaying a tile: <line filler space> <color start> |<player symbol or blank space>| <reset color> <line filler space> <endl>
 
     // Determine color to display
-    if (_tiles[player_index][pos].color == 'R')
+    if (_tiles[path_index][pos].color == 'R')
     {
         color = RED;
     }
-    else if (_tiles[player_index][pos].color == 'G')
+    else if (_tiles[path_index][pos].color == 'G')
     {
         color = GREEN;
     }
-    else if (_tiles[player_index][pos].color == 'B')
+    else if (_tiles[path_index][pos].color == 'B')
     {
         color = BLUE;
     }
-    else if (_tiles[player_index][pos].color == 'U')
+    else if (_tiles[path_index][pos].color == 'U')
     {
         color = PURPLE;
     }
-    else if (_tiles[player_index][pos].color == 'N')
+    else if (_tiles[path_index][pos].color == 'N')
     {
         color = BROWN;
     }
-    else if (_tiles[player_index][pos].color == 'P')
+    else if (_tiles[path_index][pos].color == 'P')
     {
         color = PINK;
     }
-    else if (_tiles[player_index][pos].color == 'O')
+    else if (_tiles[path_index][pos].color == 'O')
     {
         color = ORANGE;
     }
-    else if (_tiles[player_index][pos].color == 'Y')
+    else if (_tiles[path_index][pos].color == 'Y')
     {
         color = GREY;
     }
 
-    if (player == true)
+    // Display the tile with player symbols if any
+    cout << color;
+    if (players_on_tile.empty())
     {
-        cout << color << "|" << (player_index + 1) << "|" << RESET;
+        cout << "| |"; // No players on this tile
+    }
+    else if (players_on_tile.size() == 1)
+    {
+        cout << "|" << (players_on_tile[0]) << "|"; // One player on this tile
     }
     else
     {
-        cout << color << "| |" << RESET;
+        cout << "|"; // Multiple players on this tile
+        for (int i = 0; i < players_on_tile.size() - 1; i++)
+        {
+            cout << players_on_tile[i] << "&";
+        }
+        cout << players_on_tile.back() << "|"; // Last player on this tile
     }
+    cout << RESET;
 }
 
-void Board::displayTrack(int player_index)
+void Board::displayTrack(int path_index)
 {
     for (int i = 0; i < _BOARD_SIZE; i++)
     {
-        displayTile(player_index, i);
+        displayTile(path_index, i);
     }
     cout << endl;
 }
 
 void Board::displayBoard()
 {
-    for (int i = 0; i < 2; i++)
+    if (isPathActive(0))
     {
-        if (i == 0)
-            cout << "\nCub Training" << endl;
-        else
-            cout << "\nStraight to the Pride Lands" << endl;
-        displayTrack(i);
+        cout << "\nCub Training Path:" << endl;
+        displayTrack(0);
+        cout << endl;
     }
-    cout << endl;
+    if (isPathActive(1))
+    {
+        cout << "\nStraight to the Pride Lands Path:" << endl;
+        displayTrack(1);
+        cout << endl;
+    }
+}
+
+bool Board::isPathActive(int path_index)
+{
+    return _board_active[path_index];
+}
+
+void Board::setPathActive(int path_index)
+{
+    _board_active[path_index] = true;
+}
+
+int Board::getPlayerPath(int player_index)
+{
+    if (player_index >= 0 && player_index < _player_count)
+    {
+        return _player_paths[player_index];
+    }
+    return -1; // Return -1 if the player index is invalid
+}
+
+void Board::setPlayerPath(int player_index, int path_index)
+{
+    _player_paths[player_index] = path_index;
 }
 
 void Board::movePlayer(int player_index)

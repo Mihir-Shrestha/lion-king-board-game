@@ -5,8 +5,10 @@
 
 using namespace std;
 
-Player::Player(string name, int age, int stamina, int strength, int wisdom, int pride_points, string advisor, bool reached_end)
+Player::Player(string _player_name, int _path_index, string name, int age, int stamina, int strength, int wisdom, int pride_points, string advisor, bool reached_end)
 {
+    _player_name = _player_name;
+    _path_index = _path_index;
     _name = name;
     _age = age;
     _stamina = stamina;
@@ -32,6 +34,11 @@ void Player::reviewCharacter()
     cout << endl;
     cout << "Character: " << _name << endl;
     cout << "Age: " << _age << endl;
+}
+
+string Player::getPlayerName() const
+{
+    return _player_name;
 }
 
 string Player::getName() const
