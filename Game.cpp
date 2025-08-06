@@ -22,7 +22,7 @@ int main()
     cout << "-------------------------------------" << endl;
 
     int player_count = 2;
-    cout << "\nSelect the number of players (2-5): ";
+    cout << "\nSelect the number of players (2-4): ";
     cin >> player_count;
     while (cin.fail() || player_count < 2 || player_count > 5)
     {
@@ -61,18 +61,20 @@ int main()
                  << " | Pride Points:" << character.pride_points << endl;
             index++;
         }
-        cout << "\nSelect your character (1|2|3|4|5): ";
+        cout << "\nSelect your character (1-" << character_list.size() << "): ";
 
         cin >> option;
-        while (cin.fail() || option < 1 || option > 5)
+        while (cin.fail() || option < 1 || option > character_list.size())
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "\nChoose from options (1|2|3|4|5): " << endl;
+            cout << "\nChoose from options (1-" << character_list.size() << "): " << endl;
             cin >> option;
         }
         int path_index;
-        cout << "\nChoose your path (1 for Cub training, 2 for Straight to the pride lands): ";
+        cout << "\nChoose your path:" << endl;
+        cout << "1. Cub Training (Assigned advisor, -5000 Pride Points,+500 Stamina, +500 Strength and +1000 Wisdom Points )" << endl;
+        cout << "2. Straight to the Pride Lands (No advisor, +5000 Pride Points, +200 Stamina, +200 Strength and +200 Wisdom Points )" << endl;
         cin >> path_index;
 
         while (cin.fail() || path_index < 1 || path_index > 2)
@@ -88,8 +90,66 @@ int main()
 
         Character selected_character = character_list[option - 1];
 
+        string selected_advisor = "None";
+        if (path_index == 1)
+        {
+            selected_character.pride_points -= 5000;
+            selected_character.stamina += 500;
+            selected_character.strength += 500;
+            selected_character.wisdom += 1000;
+
+            vector<pair<string, string>> advisors = {
+                {"Rafiki", "Invisibility - Become un-seen"},
+                {"Nala", "Night Vision - Clearly see in darkness"},
+                {"Sarabi", "Energy Manipulation - Shape and control the properties of energy"},
+                {"Zazu", "Weather Control - Influence and manipulate weather patterns"},
+                {"Sarafina", "Super Speed - Run 4x faster than the maximum speed of a lion"}};
+
+            cout << "\nChoose an advisor for your character:" << endl;
+            for (int i = 0; i < advisors.size(); i++)
+            {
+                cout << i + 1 << ". " << advisors[i].first << " - " << advisors[i].second << endl;
+            }
+
+            int option;
+            cin >> option;
+
+            while (option < 1 || option > advisors.size() - 1)
+            {
+                cout << "Choose from options (1|2|3|4|5):" << endl;
+                cin >> option;
+            }
+
+            switch (option)
+            {
+            case 1:
+                selected_advisor = "Rafiki";
+                break;
+            case 2:
+                selected_advisor = "Nala";
+                break;
+            case 3:
+                selected_advisor = "Sarabi";
+                break;
+            case 4:
+                selected_advisor = "Zazu";
+                break;
+            case 5:
+                selected_advisor = "Sarafina";
+                break;
+            }
+            cout << "\nYou have chosen " << selected_advisor << " as your advisor." << endl;
+        }
+        else if (path_index == 2)
+        {
+            selected_character.pride_points += 5000; // Straight to the Pride Lands path
+            selected_character.stamina += 200;
+            selected_character.strength += 200;
+            selected_character.wisdom += 200;
+        }
+
         players.push_back(Player(player_name, path_index, selected_character.name, selected_character.age,
-                                 selected_character.strength, selected_character.stamina, selected_character.wisdom, selected_character.pride_points));
+                                 selected_character.strength, selected_character.stamina, selected_character.wisdom, selected_character.pride_points, selected_advisor));
 
         character_list.erase(character_list.begin() + option - 1);
     }

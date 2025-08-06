@@ -345,7 +345,7 @@ char Board::getTileColor(int player_index, int position) const
 {
     if (position >= 0 && position < _BOARD_SIZE)
     {
-        return _tiles[player_index][position].color;
+        return _tiles[_player_paths[player_index]][position].color;
     }
     return ' '; // Return a space if the position is invalid
 }
