@@ -1,20 +1,20 @@
 Game Results:
 -----------------
-Winner: Player 1 (Apollo)
+Winner: Player 2 (Zuri)
 -----------------
-Player 1: Apollo
-Age: 5
-Stamina: 200
-Strength: 900
-Wisdom: 900
-Pride Points: 39300
-Advisor: Sarafina
------------------
-Player 2: Mane
-Age: 8
-Stamina: 300
-Strength: 700
-Wisdom: 300
-Pride Points: 34100
+Player 1: Roary
+Age: 18
+Stamina: 500
+Strength: 500
+Wisdom: 500
+Pride Points: 37300
 Advisor: None
+-----------------
+Player 2: Zuri
+Age: 7
+Stamina: 1300
+Strength: 1400
+Wisdom: 2300
+Pride Points: 62500
+Advisor: Sarafina
 -----------------

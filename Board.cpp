@@ -470,7 +470,7 @@ Player Board::applyTileEffect(Player player, char tile_color, int player_index, 
             int option;
             cin >> option;
 
-            while (option < 1 || option > advisors.size() - 1)
+            while (option < 1 || option > 5)
             {
                 cout << "Choose from options (1|2|3|4|5):" << endl;
                 cin >> option;
@@ -524,7 +524,18 @@ Player Board::applyTileEffect(Player player, char tile_color, int player_index, 
                 int option;
                 cin >> option;
 
-                while (option < 1 || option > advisors.size() - 1)
+                while (option < 1 || option > 5)
+                {
+                    if (player.getAdvisor() == advisors[option - 1].first)
+                    {
+                        cout << "\nYou already have " << player.getAdvisor() << " as your advisor. Choose a different one." << endl;
+                    }
+                    else
+                    {
+                        cout << "\nChoose from options (1|2|3|4|5):" << endl;
+                    }
+                    cin >> option;
+                }
                 {
                     cout << "\nChoose from options (1|2|3|4|5):" << endl;
                     cin >> option;

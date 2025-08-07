@@ -14,12 +14,15 @@ int main()
 {
     srand(time(0));
 
-    cout << "\nWelcome to the Lion King themed Board Game!" << endl;
-    cout << "-------------------------------------" << endl;
-    cout << "\nThis game is inspired by the Lion King and features characters, riddles, and random events." << endl;
-    cout << "\nYou will navigate through a board, facing challenges and collecting pride points." << endl;
-    cout << "\nLet's begin!" << endl;
-    cout << "-------------------------------------" << endl;
+    cout << "\nWelcome to The Circle of Life - A Lion King Themed Board Game!" << endl;
+    cout << "--------------------------------------------------------------" << endl;
+    cout << "\nIn this game, you'll take on the role of a character from the Lion King universe." << endl;
+    cout << "Navigate the board, answer riddles, and face random events as you journey through the wild." << endl;
+    cout << "Your goal is to collect Pride Points and survive the challenges of the savanna!" << endl;
+    cout << "\nOnce all players reach the end of the board, the player with the most Pride Points wins the game!" << endl;
+    cout << "\nGet ready to test your luck, strategy, and knowledge in the Circle of Life." << endl;
+    cout << "\nLet the adventure begin!" << endl;
+    cout << "\n--------------------------------------------------------------" << endl;
 
     int player_count = 2;
     cout << "\nSelect the number of players (2-4): ";
@@ -114,8 +117,10 @@ int main()
             int option;
             cin >> option;
 
-            while (option < 1 || option > advisors.size() - 1)
+            while (cin.fail() || option < 1 || option > 5)
             {
+                cin.clear();
+                cin.ignore(1000, '\n');
                 cout << "Choose from options (1|2|3|4|5):" << endl;
                 cin >> option;
             }
