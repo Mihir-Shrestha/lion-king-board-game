@@ -67,7 +67,7 @@ lion-king-board-game/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/lion-king-board-game.git
+git clone https://github.com/Mihir-Shrestha/lion-king-board-game.git
 cd lion-king-board-game
 ```
 
