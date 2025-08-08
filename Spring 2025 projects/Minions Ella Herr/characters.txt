@@ -1,6 +1,0 @@
-playerName|favorite thing|stamina|strength|smarts|MinionPoints
-Bob|Teddy Bear|600|500|800|20000
-Kevin|Golf|600|800|1000|20000
-Stuart|Ukulele|700|700|900|20000
-Dave|Ice Cream|700|1000|500|20000
-Otto|Pet Rock|600|800|400|20000
